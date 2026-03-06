@@ -1,0 +1,592 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#fff8f3">
+<title>8 Марта 🌸 Вы приглашены!</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Nunito:wght@300;400;600&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+:root {
+  --rose:  #e8637a;
+  --deep:  #c23a57;
+  --blush: #f9b8c4;
+  --cream: #fff8f3;
+  --peach: #fde8dc;
+  --soft:  #f5d0d8;
+  --text:  #4a2030;
+  --muted: #9a5565;
+}
+
+html, body {
+  width: 100%; min-height: 100%;
+  font-family: 'Nunito', sans-serif;
+  background: var(--cream);
+  color: var(--text);
+  overflow-x: hidden;
+  -webkit-tap-highlight-color: transparent;
+}
+
+/* Aurora */
+body::before {
+  content: ''; position: fixed; inset: 0; z-index: 0; pointer-events: none;
+  background:
+    radial-gradient(ellipse 80% 60% at 15%  10%, rgba(249,184,196,.42) 0%, transparent 62%),
+    radial-gradient(ellipse 55% 50% at 85%  85%, rgba(253,232,220,.46) 0%, transparent 60%),
+    radial-gradient(ellipse 50% 40% at 55%  35%, rgba(232,99,122,.12)  0%, transparent 56%);
+  animation: aurora 14s ease-in-out infinite alternate;
+}
+@keyframes aurora {
+  from { opacity: .7; transform: scale(1);    }
+  to   { opacity: 1;  transform: scale(1.05); }
+}
+
+/* Petals */
+#petalCanvas { position: fixed; inset: 0; pointer-events: none; z-index: 1; overflow: hidden; }
+.petal { position: absolute; top: -60px; user-select: none; pointer-events: none; animation: petalFall linear infinite; }
+@keyframes petalFall {
+  0%   { transform: translateY(0)     translateX(0)     rotate(0deg);   opacity: .85; }
+  25%  { transform: translateY(25vh)  translateX(18px)  rotate(90deg);  }
+  50%  { transform: translateY(52vh)  translateX(-14px) rotate(180deg); }
+  75%  { transform: translateY(78vh)  translateX(10px)  rotate(270deg); }
+  100% { transform: translateY(112vh) translateX(-8px)  rotate(360deg); opacity: 0; }
+}
+
+/* Screens */
+.screen {
+  min-height: 100vh;
+  display: flex; flex-direction: column;
+  align-items: center; justify-content: center;
+  padding: clamp(2rem,5vw,3.5rem) clamp(1rem,5vw,2rem);
+  position: relative; z-index: 2;
+}
+.screen.hidden { display: none !important; }
+
+/* ══════════════════════════════
+   LANDING
+══════════════════════════════ */
+#landing { text-align: center; }
+
+.enter { opacity: 0; animation: enterUp .55s ease forwards; }
+.d1 { animation-delay: .05s; } .d2 { animation-delay: .2s; }
+.d3 { animation-delay: .38s; } .d4 { animation-delay: .52s; }
+.d5 { animation-delay: .66s; } .d6 { animation-delay: .8s; }
+.d7 { animation-delay: .94s; }
+@keyframes enterUp {
+  from { opacity: 0; transform: translateY(16px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+.badge {
+  display: inline-block;
+  background: linear-gradient(135deg, var(--blush), var(--peach));
+  color: var(--deep); font-weight: 300; letter-spacing: .35em; font-size: .72rem;
+  text-transform: uppercase; padding: .45rem 1.5rem;
+  border-radius: 50px; border: 1px solid rgba(226,100,120,.2);
+  margin-bottom: 1.4rem;
+}
+
+h1.title {
+  font-family: 'Playfair Display', serif;
+  font-size: clamp(2.6rem, 8vw, 5rem); line-height: 1.08;
+  color: var(--deep); font-weight: 700; margin-bottom: .3rem;
+}
+h1.title em { display: block; font-style: italic; font-weight: 400; color: var(--rose); font-size: .74em; }
+
+.divider {
+  width: 60px; height: 2px; margin: 1.1rem auto;
+  background: linear-gradient(90deg, transparent, var(--rose), transparent);
+}
+
+.wish-text {
+  font-weight: 300; font-size: clamp(.9rem,2.4vw,1.1rem);
+  line-height: 1.9; max-width: 500px; color: #7a4055; margin-bottom: .9rem;
+}
+
+.invite-text {
+  font-family: 'Playfair Display', serif; font-style: italic;
+  font-size: clamp(.95rem,2.8vw,1.22rem); color: var(--deep); margin-bottom: 2.2rem;
+}
+
+/* ──────────────────────────────
+   BUTTONS
+   
+   YES grows with transform: scale() each time
+   NO is clicked — making YES more and more
+   tempting. NO stays the same size but its
+   text changes to be funny.
+   
+   YES wrapper handles the gentle pulse.
+   Scale on the button itself never affects layout.
+────────────────────────────── */
+.btn-row {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+  padding: 1.8rem 1rem;
+}
+
+.btn {
+  border: none; cursor: pointer;
+  font-family: 'Nunito', sans-serif; font-weight: 600;
+  letter-spacing: .06em; border-radius: 50px;
+  outline: none; -webkit-appearance: none;
+  touch-action: manipulation;
+  width: 130px; height: 50px; font-size: 1rem;
+  flex-shrink: 0;
+}
+
+/* YES wrapper — holds scale transform so layout is never affected */
+#yes-wrap {
+  display: flex; align-items: center; justify-content: center;
+  padding: 0.8rem;
+}
+
+#yes-btn {
+  background: linear-gradient(135deg, var(--rose), var(--deep));
+  color: #fff;
+  box-shadow: 0 8px 22px rgba(194,58,87,.32);
+  transform: scale(1);
+  transform-origin: center;
+  transition: transform .4s cubic-bezier(.34,1.56,.64,1),
+              box-shadow .3s ease,
+              filter .18s ease;
+}
+#yes-btn:hover  { filter: brightness(1.07); }
+#yes-btn:active { filter: brightness(.93); }
+
+/* Pulse animation on the wrapper when YES grows */
+@keyframes pulse {
+  0%   { transform: scale(1); }
+  40%  { transform: scale(1.08); }
+  100% { transform: scale(1); }
+}
+#yes-wrap.pulsing { animation: pulse .45s ease-out; }
+
+/* NO is static — same size always, only text changes */
+#no-btn {
+  background: transparent;
+  color: var(--rose);
+  border: 2px solid var(--blush);
+  transition: background .18s ease;
+}
+#no-btn:hover { background: var(--soft); }
+#no-btn:active { background: var(--blush); }
+
+.no-taunt {
+  font-size: .75rem; color: var(--rose);
+  min-height: 1.2rem; text-align: center;
+  opacity: 0; transition: opacity .3s;
+  margin-top: -.8rem; margin-bottom: .2rem;
+}
+.no-taunt.show { opacity: 1; }
+
+/* ══════════════════════════════
+   PARTY SCREEN
+══════════════════════════════ */
+#party {
+  background: linear-gradient(155deg, #fff0f5 0%, #fde8dc 55%, #ffd6e0 100%);
+  justify-content: flex-start;
+  padding-top: clamp(2.5rem, 8vw, 5rem);
+  overflow-y: auto;
+}
+
+#heartsBurst { position: fixed; inset: 0; pointer-events: none; z-index: 999; }
+.h-burst { position: absolute; animation: burstFly 1.5s ease-out forwards; }
+@keyframes burstFly {
+  0%   { transform: translate(0,0) scale(.3); opacity: 1; }
+  60%  { opacity: 1; }
+  100% { transform: translate(var(--dx),var(--dy)) scale(1); opacity: 0; }
+}
+
+#confettiCanvas { position: fixed; inset: 0; pointer-events: none; z-index: 998; }
+
+.party-icon {
+  font-size: clamp(2.8rem,7vw,3.8rem); margin-bottom: .6rem;
+  animation: popIn .7s cubic-bezier(.34,1.56,.64,1) both;
+}
+@keyframes popIn { from { transform: scale(0); opacity: 0; } to { transform: scale(1); opacity: 1; } }
+
+#party h2 {
+  font-family: 'Playfair Display', serif;
+  font-size: clamp(2rem,6.5vw,3.4rem); color: var(--deep);
+  line-height: 1.1; margin-bottom: .4rem;
+  animation: slideUp .55s .15s ease both;
+}
+#party h2 em { font-style: italic; color: var(--rose); }
+#party .sub {
+  font-weight: 300; font-size: clamp(.88rem,2.4vw,1rem); color: var(--muted);
+  margin-bottom: 1.8rem; animation: slideUp .55s .28s ease both;
+}
+@keyframes slideUp { from { transform: translateY(18px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
+
+.info-card {
+  background: rgba(255,255,255,.78);
+  backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(232,99,122,.13); border-radius: 22px;
+  padding: clamp(1.3rem,4vw,1.9rem) clamp(1.2rem,4vw,2rem);
+  width: min(430px, 92vw);
+  box-shadow: 0 12px 40px rgba(194,58,87,.1);
+  margin-bottom: 1.8rem;
+  animation: slideUp .6s .42s ease both;
+}
+.info-row {
+  display: flex; align-items: flex-start; gap: .85rem;
+  padding: .6rem 0; border-bottom: 1px solid rgba(232,99,122,.09); text-align: left;
+}
+.info-row:first-child { padding-top: 0; }
+.info-row:last-child  { border-bottom: none; padding-bottom: 0; }
+.info-icon { font-size: 1.25rem; flex-shrink: 0; margin-top: 1px; }
+.info-label {
+  display: block; font-size: .67rem; font-weight: 600;
+  letter-spacing: .17em; text-transform: uppercase;
+  color: var(--rose); margin-bottom: .1rem;
+}
+.info-value {
+  font-family: 'Playfair Display', serif;
+  font-size: clamp(.93rem,2.4vw,1.04rem); color: var(--text); line-height: 1.45;
+}
+.info-value small { font-size: .82em; color: var(--muted); }
+
+.warm-note {
+  width: min(420px, 92vw);
+  font-family: 'Playfair Display', serif; font-style: italic;
+  font-size: clamp(.95rem,2.8vw,1.15rem); color: #7a4055;
+  line-height: 1.8; text-align: center; margin-bottom: 2rem;
+  animation: slideUp .6s .56s ease both;
+}
+
+.floater {
+  position: fixed; pointer-events: none; user-select: none;
+  animation: floatBob ease-in-out infinite; z-index: 3;
+}
+@keyframes floatBob {
+  0%,100% { transform: translateY(0);     opacity: .5; }
+  50%     { transform: translateY(-22px); opacity: .32; }
+}
+
+.home-btn {
+  display: inline-flex; align-items: center; gap: .45rem;
+  background: rgba(255,255,255,.7); border: 1.5px solid rgba(194,58,87,.22);
+  color: var(--deep); border-radius: 50px; padding: .55rem 1.3rem;
+  font-family: 'Nunito', sans-serif; font-size: .85rem; font-weight: 600;
+  cursor: pointer; transition: background .2s, border-color .2s, transform .18s, box-shadow .2s;
+  animation: slideUp .6s .7s ease both; margin-bottom: 2rem;
+}
+.home-btn:hover { background: var(--soft); border-color: var(--rose); transform: translateY(-1px); box-shadow: 0 4px 14px rgba(194,58,87,.18); }
+.home-btn:active { transform: scale(.97); }
+.home-btn svg { width: 14px; height: 14px; stroke: var(--deep); fill: none; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+</style>
+</head>
+<body>
+
+<div id="petalCanvas"></div>
+<canvas id="confettiCanvas"></canvas>
+<div id="heartsBurst"></div>
+
+<!-- ══════════════ LANDING ══════════════ -->
+<div class="screen" id="landing">
+
+  <div class="badge enter d1">8 Марта · International Women's Day</div>
+
+  <h1 class="title enter d2">
+    С праздником,<br><em>наши дорогие!</em>
+  </h1>
+
+  <div class="divider enter d3"></div>
+
+  <p class="wish-text enter d4">
+    Пусть этот день будет наполнен улыбками, теплом и бесконечной радостью.
+    Вы делаете нашу жизнь ярче, а наш класс — лучшим местом на свете. 🌷
+  </p>
+
+  <p class="invite-text enter d5">
+    Мы хотим отпраздновать этот день вместе с вами —<br>
+    приходите на наш маленький праздник!
+  </p>
+
+  <!-- Taunt line sits above the buttons -->
+  <div class="no-taunt enter d6" id="noTaunt"></div>
+
+  <div class="btn-row enter d7">
+    <!-- YES wrapper is what holds the scale -->
+    <div id="yes-wrap">
+      <button class="btn" id="yes-btn" onclick="onYes()">Да! 🌸</button>
+    </div>
+    <button class="btn" id="no-btn" onclick="onNo()">Нет</button>
+  </div>
+
+</div>
+
+<!-- ══════════════ PARTY ══════════════ -->
+<div class="screen hidden" id="party">
+  <div class="party-icon">🎉</div>
+  <h2>Ура! <em>Ждём вас!</em></h2>
+  <p class="sub">Мы так рады, что вы придёте 💕</p>
+
+  <div class="info-card">
+    <div class="info-row">
+      <span class="info-icon">📅</span>
+      <div><span class="info-label">Дата</span>
+           <span class="info-value">8 марта 2026, </span></div>
+    </div>
+    <div class="info-row">
+      <span class="info-icon">🕔</span>
+      <div><span class="info-label">Время</span>
+           <span class="info-value">18:30 — до последнего смеха</span></div>
+    </div>
+    <div class="info-row">
+      <span class="info-icon">📍</span>
+      <div><span class="info-label">Место</span>
+           <span class="info-value">18a микрорайон, 4 дом, Бекжанның үйі<br>
+             <small>(Бекжан өзі ашады, домофон жоқ)</small></span></div>
+    </div>
+    <div class="info-row">
+      <span class="info-icon">🎀</span>
+      <div><span class="info-label">Формат</span>
+           <span class="info-value">Музыка, угощения, фото и хорошее настроение</span></div>
+    </div>
+  </div>
+
+  <p class="warm-note">
+    Вы — самые лучшие девочки в нашем классе.<br>
+    Спасибо, что делаете каждый день особенным.<br>
+    Мы вас очень ценим и ждём! 🌸✨
+  </p>
+
+  <button class="home-btn" onclick="goHome()">
+    <svg viewBox="0 0 24 24"><path d="M3 9.5L12 3l9 6.5V20a1 1 0 01-1 1H5a1 1 0 01-1-1V9.5z"/><path d="M9 21V12h6v9"/></svg>
+    На главную
+  </button>
+</div>
+
+<script>
+/* ── Petals ── */
+const PETALS = ['🌸','🌺','🌷','🌹','💮'];
+const petalCanvas = document.getElementById('petalCanvas');
+function spawnPetal() {
+  const el = document.createElement('div');
+  el.className = 'petal';
+  el.textContent = PETALS[Math.floor(Math.random() * PETALS.length)];
+  el.style.left              = (Math.random() * 100) + 'vw';
+  el.style.fontSize          = (.8 + Math.random() * 1.2) + 'rem';
+  el.style.animationDuration = (8 + Math.random() * 9) + 's';
+  el.style.animationDelay    = (Math.random() * 8) + 's';
+  petalCanvas.appendChild(el);
+}
+for (let i = 0; i < 22; i++) spawnPetal();
+
+/* ─────────────────────────────────────────
+   NO BUTTON — changes text each click
+   YES BUTTON — grows bigger each click
+   
+   YES uses transform:scale() on the button itself.
+   Scale never touches layout, zero position bugs.
+   The yes-wrap gets a pulse animation that is
+   completely independent from the scale transition.
+───────────────────────────────────────── */
+const NO_TEXTS = [
+  'Нет',
+  'Ты уверена? 🤔',
+  'Серьёзно?? 😢',
+  'Подумай ещё раз 💖',
+  'Не разбивай сердце 🥺',
+  'ПОЖАЛУЙСТА 🙏',
+  'Ну давай же! 🌸',
+  'Последний шанс!',
+  'Без тебя не то... 😭💕',
+];
+const TAUNTS = [
+  'уже 3 раза нажала 😭',
+  'нам немного грустно...',
+  'ДА становится больше неспроста 💔',
+  'может всё-таки ДА? 👉👈',
+  'мы будем скучать 🥺',
+];
+
+let noCount = 0;
+let yesScale = 1;
+
+function onNo() {
+  noCount++;
+  const yesBtn  = document.getElementById('yes-btn');
+  const yesWrap = document.getElementById('yes-wrap');
+  const noBtn   = document.getElementById('no-btn');
+  const taunt   = document.getElementById('noTaunt');
+
+  // ── YES grows bigger (scale only, no layout impact) ──
+  yesScale = Math.min(yesScale + 0.15, 2.2);
+  yesBtn.style.transform = `scale(${yesScale})`;
+  yesBtn.style.boxShadow = `0 ${6 + noCount*2}px ${18 + noCount*4}px rgba(194,58,87,${Math.min(.3 + noCount*.04, .65)})`;
+
+  // ── Pulse the wrapper (independent of scale transition) ──
+  yesWrap.classList.remove('pulsing');
+  void yesWrap.offsetWidth;
+  yesWrap.classList.add('pulsing');
+
+  // ── NO text changes ──
+  noBtn.textContent = NO_TEXTS[Math.min(noCount, NO_TEXTS.length - 1)];
+
+  // ── Taunt ──
+  if (noCount >= 3) {
+    taunt.textContent = TAUNTS[Math.min(noCount - 3, TAUNTS.length - 1)];
+    taunt.classList.add('show');
+  }
+}
+
+/* ── YES ── */
+function onYes() {
+  for (let i = 0; i < 14; i++) spawnPetal();
+  spawnHearts();
+  launchConfetti();
+
+  const landing = document.getElementById('landing');
+  landing.style.transition = 'opacity .5s ease, transform .5s ease';
+  landing.style.opacity    = '0';
+  landing.style.transform  = 'scale(.97)';
+
+  setTimeout(() => {
+    landing.classList.add('hidden');
+    landing.style.cssText = '';
+
+    const party = document.getElementById('party');
+    party.classList.remove('hidden');
+    party.style.opacity   = '0';
+    party.style.transform = 'scale(.96)';
+
+    requestAnimationFrame(() => requestAnimationFrame(() => {
+      party.style.transition = 'opacity .65s ease, transform .65s ease';
+      party.style.opacity    = '1';
+      party.style.transform  = 'scale(1)';
+    }));
+
+    spawnFloaters();
+  }, 520);
+}
+
+/* ── Hearts burst ── */
+function spawnHearts() {
+  const c   = document.getElementById('heartsBurst');
+  const cx  = window.innerWidth / 2;
+  const cy  = window.innerHeight / 2;
+  const ico = ['💖','💗','💕','💓','🌸','✨','💝','🌷','🎀'];
+  for (let i = 0; i < 40; i++) {
+    const h = document.createElement('div');
+    h.className = 'h-burst';
+    h.textContent = ico[Math.floor(Math.random() * ico.length)];
+    const angle = (Math.PI * 2 * i / 40) + (Math.random() - .5) * .5;
+    const dist  = 80 + Math.random() * 260;
+    h.style.left     = cx + 'px';
+    h.style.top      = cy + 'px';
+    h.style.fontSize = (1 + Math.random() * 1.5) + 'rem';
+    h.style.animationDelay = (Math.random() * .25) + 's';
+    h.style.setProperty('--dx', Math.cos(angle) * dist + 'px');
+    h.style.setProperty('--dy', Math.sin(angle) * dist + 'px');
+    c.appendChild(h);
+  }
+  setTimeout(() => { c.innerHTML = ''; }, 2200);
+}
+
+/* ── Confetti ── */
+const confCanvas = document.getElementById('confettiCanvas');
+const confCtx    = confCanvas.getContext('2d');
+function resizeConf() { confCanvas.width = window.innerWidth; confCanvas.height = window.innerHeight; }
+resizeConf();
+window.addEventListener('resize', resizeConf);
+
+const CONF_COLORS = ['#e8637a','#f9b8c4','#fde8dc','#c23a57','#f5d0d8','#ffb3c6','#ff8fab','#e8a87c'];
+let parts = [], rafId = null;
+
+function launchConfetti() {
+  parts = [];
+  for (let i = 0; i < 180; i++) {
+    const a = Math.random() * Math.PI * .9 + Math.PI * 1.05;
+    const s = 4 + Math.random() * 12;
+    parts.push({
+      x: window.innerWidth/2, y: window.innerHeight/2,
+      vx: Math.cos(a)*s, vy: Math.sin(a)*s - 4,
+      rot: Math.random()*360, rotV: (Math.random()-.5)*10,
+      w: 5+Math.random()*9, h: 3+Math.random()*5,
+      color: CONF_COLORS[Math.floor(Math.random()*CONF_COLORS.length)],
+      life: 0, max: 85+Math.floor(Math.random()*75), round: Math.random()>.55
+    });
+  }
+  if (rafId) cancelAnimationFrame(rafId);
+  animateConf();
+}
+function animateConf() {
+  confCtx.clearRect(0, 0, confCanvas.width, confCanvas.height);
+  parts = parts.filter(p => p.life < p.max);
+  for (const p of parts) {
+    p.x += p.vx; p.y += p.vy; p.vy += .28; p.vx *= .99;
+    p.rot += p.rotV; p.life++;
+    confCtx.save();
+    confCtx.globalAlpha = 1 - p.life/p.max;
+    confCtx.translate(p.x, p.y);
+    confCtx.rotate(p.rot * Math.PI/180);
+    confCtx.fillStyle = p.color;
+    if (p.round) { confCtx.beginPath(); confCtx.arc(0,0,p.w/2,0,Math.PI*2); confCtx.fill(); }
+    else { confCtx.fillRect(-p.w/2,-p.h/2,p.w,p.h); }
+    confCtx.restore();
+  }
+  if (parts.length > 0) rafId = requestAnimationFrame(animateConf);
+  else { confCtx.clearRect(0,0,confCanvas.width,confCanvas.height); rafId = null; }
+}
+
+/* ── Floaters ── */
+const FLOAT_ITEMS = ['🌸','💕','✨','🌷','💖','🌺','🎀'];
+let floaters = [];
+function spawnFloaters() {
+  floaters.forEach(el => el.remove()); floaters = [];
+  for (let i = 0; i < 9; i++) {
+    const el = document.createElement('div');
+    el.className = 'floater';
+    el.textContent = FLOAT_ITEMS[Math.floor(Math.random()*FLOAT_ITEMS.length)];
+    el.style.left              = (3+Math.random()*93)+'vw';
+    el.style.top               = (3+Math.random()*88)+'vh';
+    el.style.fontSize          = (1+Math.random()*1.3)+'rem';
+    el.style.animationDuration = (3.5+Math.random()*4)+'s';
+    el.style.animationDelay    = (Math.random()*2.5)+'s';
+    document.body.appendChild(el); floaters.push(el);
+  }
+}
+
+/* ── Go Home ── */
+function goHome() {
+  if (rafId) { cancelAnimationFrame(rafId); rafId = null; confCtx.clearRect(0,0,confCanvas.width,confCanvas.height); }
+  floaters.forEach(el => el.remove()); floaters = [];
+
+  const party = document.getElementById('party');
+  party.style.transition = 'opacity .45s ease, transform .45s ease';
+  party.style.opacity = '0'; party.style.transform = 'scale(.97)';
+
+  setTimeout(() => {
+    party.classList.add('hidden'); party.style.cssText = '';
+
+    // Reset buttons
+    noCount = 0; yesScale = 1;
+    const yesBtn  = document.getElementById('yes-btn');
+    const yesWrap = document.getElementById('yes-wrap');
+    const noBtn   = document.getElementById('no-btn');
+    yesBtn.style.transform = 'scale(1)';
+    yesBtn.style.boxShadow = '';
+    yesWrap.classList.remove('pulsing');
+    noBtn.textContent = 'Нет';
+    document.getElementById('noTaunt').classList.remove('show');
+
+    const landing = document.getElementById('landing');
+    landing.classList.remove('hidden');
+    landing.style.opacity = '0'; landing.style.transform = 'scale(.97)';
+    requestAnimationFrame(() => requestAnimationFrame(() => {
+      landing.style.transition = 'opacity .55s ease, transform .55s ease';
+      landing.style.opacity = '1'; landing.style.transform = 'scale(1)';
+    }));
+  }, 460);
+}
+</script>
+</body>
+</html>
